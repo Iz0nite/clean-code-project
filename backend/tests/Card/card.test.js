@@ -3,6 +3,133 @@ const httpMocks = require('node-mocks-http')
 const cardController = require("../../controllers/Card")
 const cardRepository = require("../../database/card-repository")
 
+describe("Cards recovery", () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it ("Should return an error (422) because the queryParams are wrong", () => {
+    const request = httpMocks.createRequest({
+      query: {
+        wrong: "What is this place ?",
+      }
+    })
+
+    const response = httpMocks.createResponse()
+
+    cardController.getCards(request, response)
+
+    expect(response.statusCode).toEqual(422)
+  })
+
+  it ("Should call the cardRepository to get a collection of card in DB, with no tags, and return an array", () => {
+    const request = httpMocks.createRequest()
+
+    const response = httpMocks.createResponse()
+
+    jest.spyOn(cardRepository, 'getCardCollection').mockReturnValue(
+      [
+        {
+          id: 1,
+          category: "FIRST",
+          question: "Am I the question ?",
+          answer: "Yes you are",
+          tag: "philosophy"
+        }
+      ]
+    )
+
+    cardController.getCards(request, response)
+
+    expect(response.statusCode).toEqual(200)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledTimes(1)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledWith(undefined)
+    expect(response._getJSONData()).toEqual([
+      {
+        id: 1,
+        category: "FIRST",
+        question: "Am I the question ?",
+        answer: "Yes you are",
+        tag: "philosophy"
+      }
+    ])
+  })
+
+  it ("Should call the cardRepository to get a collection of card in DB, with one tag, and return an array", () => {
+    const request = httpMocks.createRequest({
+      query: {
+        tags: "philosophy"
+      }
+    })
+
+    const response = httpMocks.createResponse()
+
+    jest.spyOn(cardRepository, 'getCardCollection').mockReturnValue(
+      [
+        {
+          id: 1,
+          category: "FIRST",
+          question: "Am I the question ?",
+          answer: "Yes you are",
+          tag: "philosophy"
+        }
+      ]
+    )
+
+    cardController.getCards(request, response)
+
+    expect(response.statusCode).toEqual(200)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledTimes(1)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledWith([ "philosophy" ])
+    expect(response._getJSONData()).toEqual([
+      {
+        id: 1,
+        category: "FIRST",
+        question: "Am I the question ?",
+        answer: "Yes you are",
+        tag: "philosophy"
+      }
+    ])
+  })
+
+  it ("Should call the cardRepository to get a collection of card in DB, with two tags, and return an array", () => {
+    const request = httpMocks.createRequest({
+      query: {
+        tags: [ "philosophy", "art" ]
+      }
+    })
+
+    const response = httpMocks.createResponse()
+
+    jest.spyOn(cardRepository, 'getCardCollection').mockReturnValue(
+      [
+        {
+          id: 1,
+          category: "FIRST",
+          question: "Am I the question ?",
+          answer: "Yes you are",
+          tag: "philosophy"
+        }
+      ]
+    )
+
+    cardController.getCards(request, response)
+
+    expect(response.statusCode).toEqual(200)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledTimes(1)
+    expect(cardRepository.getCardCollection).toHaveBeenCalledWith([ "philosophy", "art" ])
+    expect(response._getJSONData()).toEqual([
+      {
+        id: 1,
+        category: "FIRST",
+        question: "Am I the question ?",
+        answer: "Yes you are",
+        tag: "philosophy"
+      }
+    ])
+  })
+})
+
 describe("Card creation", () => {
 
   afterEach(() => {

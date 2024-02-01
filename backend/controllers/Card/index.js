@@ -38,6 +38,7 @@ module.exports = {
 
     const card = CardRepository.insertCard({
       category: CATEGORY[0],
+      date: new Date().toISOString(),
       ...validatedBody
     })
 

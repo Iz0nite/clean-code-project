@@ -3,6 +3,8 @@ const httpMocks = require('node-mocks-http')
 const cardController = require("../../controllers/Card")
 const cardRepository = require("../../database/card-repository")
 
+const isoPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+
 describe("Cards recovery", () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -32,6 +34,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
+          date: new Date().toISOString(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -48,6 +51,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
+        date: expect.stringMatching(isoPattern),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -69,6 +73,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
+          date: new Date().toISOString(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -85,6 +90,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
+        date: expect.stringMatching(isoPattern),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -106,6 +112,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
+          date: new Date().toISOString(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -122,6 +129,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
+        date: expect.stringMatching(isoPattern),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -180,6 +188,7 @@ describe("Card creation", () => {
     jest.spyOn(cardRepository, 'insertCard').mockReturnValue({
       id: 1,
       category: "FIRST",
+      date: new Date().toISOString(),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"
@@ -191,6 +200,7 @@ describe("Card creation", () => {
     expect(cardRepository.insertCard).toHaveBeenCalledTimes(1)
     expect(cardRepository.insertCard).toHaveBeenCalledWith({
       category: "FIRST",
+      date: expect.stringMatching(isoPattern),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"
@@ -198,6 +208,7 @@ describe("Card creation", () => {
     expect(response._getJSONData()).toEqual({
       id: 1,
       category: "FIRST",
+      date: expect.stringMatching(isoPattern),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"

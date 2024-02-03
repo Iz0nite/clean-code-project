@@ -1,23 +1,10 @@
-const Joi = require('joi');
-
 const CardRepository = require('../../database/card-repository')
-const { CATEGORY } = require('../Category')
 
-const getCardsQueryParamsSchema = Joi.object({
-  tags: [Joi.array().items(Joi.string()).min(1), Joi.string()]
-})
+const { getCardsQueryParamsSchema, createCardBodySchema } = require('./schema')
+const { formatTagsToArray } = require('./tag')
+const { getCategoryNameByIndex } = require('./category')
 
-const createCardBodySchema = Joi.object({
-  question: Joi.string().required(),
-  answer: Joi.string().required(),
-  tag: Joi.string()
-})
-
-function formatTagsToArray (tags) {
-  return typeof tags === "string" ? [ tags ] : tags
-}
-
-module.exports = {
+const CardController = {
   getCards: (request, response) => {
     const { value: validatedQueryParams, error } = getCardsQueryParamsSchema.validate(request.query)
 
@@ -37,10 +24,15 @@ module.exports = {
     }
 
     const card = CardRepository.insertCard({
-      category: CATEGORY[0],
+      category: getCategoryNameByIndex(0),
+      date: new Date().toISOString(),
       ...validatedBody
     })
 
     return response.status(201).json(card)
   }
+}
+
+module.exports = {
+  CardController
 }

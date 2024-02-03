@@ -1,16 +1,15 @@
-const cardController = require("../controllers/Card")
+const { CardController } = require("../controllers/Card")
+const { QuizzController } = require("../controllers/Quizz")
 
 const { Router } = require("express")
 
 const router = Router()
 
-router.get("/", cardController.getCards)
+router.get("/", CardController.getCards)
 
-router.post("/", cardController.createCard)
+router.post("/", CardController.createCard)
 
-router.get("/quizz", (req, res) => {
-  return res.send("You are in /quizz")
-})
+router.get("/quizz", QuizzController.getQuizz)
 
 router.patch("/:cardId/answer", (req, res) => {
   return res.send("You are in /answer")

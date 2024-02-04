@@ -3,6 +3,7 @@ const CardRepository = require('../../database/card-repository')
 const { getCardsQueryParamsSchema, createCardBodySchema } = require('./schema')
 const { formatTagsToArray } = require('./tag')
 const { getCategoryNameByIndex } = require('./category')
+const { DateTime } = require('luxon')
 
 const CardController = {
   getCards: (request, response) => {
@@ -25,7 +26,7 @@ const CardController = {
 
     const card = CardRepository.insertCard({
       category: getCategoryNameByIndex(0),
-      date: new Date().toISOString(),
+      date: DateTime.now().toISO(),
       ...validatedBody
     })
 

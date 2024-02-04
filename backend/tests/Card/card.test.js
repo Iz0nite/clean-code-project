@@ -1,9 +1,13 @@
 const httpMocks = require('node-mocks-http')
+const { DateTime, Settings } = require('luxon')
 
 const cardRepository = require("../../database/card-repository")
 const { CardController } = require('../../controllers/Card')
 
 const isoPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+
+const expectedNow = DateTime.local(2024, 2, 7, 23, 0, 0);
+Settings.now = () => expectedNow.toMillis();
 
 describe("Cards recovery", () => {
   afterEach(() => {
@@ -34,7 +38,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
-          date: new Date().toISOString(),
+          date: DateTime.now().toISO(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -51,7 +55,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
-        date: expect.stringMatching(isoPattern),
+        date: expectedNow.toISO(),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -73,7 +77,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
-          date: new Date().toISOString(),
+          date: DateTime.now().toISO(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -90,7 +94,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
-        date: expect.stringMatching(isoPattern),
+        date: expectedNow.toISO(),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -112,7 +116,7 @@ describe("Cards recovery", () => {
         {
           id: 1,
           category: "FIRST",
-          date: new Date().toISOString(),
+          date: DateTime.now().toISO(),
           question: "Am I the question ?",
           answer: "Yes you are",
           tag: "philosophy"
@@ -129,7 +133,7 @@ describe("Cards recovery", () => {
       {
         id: 1,
         category: "FIRST",
-        date: expect.stringMatching(isoPattern),
+        date: expectedNow.toISO(),
         question: "Am I the question ?",
         answer: "Yes you are",
         tag: "philosophy"
@@ -188,7 +192,7 @@ describe("Card creation", () => {
     jest.spyOn(cardRepository, 'insertCard').mockReturnValue({
       id: 1,
       category: "FIRST",
-      date: new Date().toISOString(),
+      date: DateTime.now().toISO(),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"
@@ -200,7 +204,7 @@ describe("Card creation", () => {
     expect(cardRepository.insertCard).toHaveBeenCalledTimes(1)
     expect(cardRepository.insertCard).toHaveBeenCalledWith({
       category: "FIRST",
-      date: expect.stringMatching(isoPattern),
+      date: expectedNow.toISO(),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"
@@ -208,7 +212,7 @@ describe("Card creation", () => {
     expect(response._getJSONData()).toEqual({
       id: 1,
       category: "FIRST",
-      date: expect.stringMatching(isoPattern),
+      date: expectedNow.toISO(),
       question: "Am I the question ?",
       answer: "Yes you are",
       tag: "philosophy"

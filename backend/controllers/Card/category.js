@@ -18,8 +18,17 @@ function getDayDelayByCategoryName (categoryName) {
   return CATEGORIES_BY_NAME_AND_DAY_DELAY.find(category => category.categoryName === categoryName).dayDelay
 }
 
+function retrieveUpperCategory (categoryName) {
+  const categoryIndex = CATEGORIES_BY_NAME_AND_DAY_DELAY.findIndex(categories => categories.categoryName === categoryName)
+
+  if (categoryIndex !== -1 && categoryIndex !== CATEGORIES_BY_NAME_AND_DAY_DELAY.length - 1) {
+    return CATEGORIES_BY_NAME_AND_DAY_DELAY[categoryIndex + 1].categoryName
+  }
+}
+
 module.exports = {
   getCategoryNameByIndex,
   getDayDelayByCategoryName,
+  retrieveUpperCategory,
   LAST_CATEGORY_NAME
 }

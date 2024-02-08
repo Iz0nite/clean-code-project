@@ -11,9 +11,7 @@ router.post("/", CardController.createCard)
 
 router.get("/quizz", QuizzController.getQuizz)
 
-router.patch("/:cardId/answer", (req, res) => {
-  return res.send("You are in /answer")
-})
+router.patch("/:cardId/answer", QuizzController.answerQuestion)
 
 
 module.exports = router

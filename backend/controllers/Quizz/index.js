@@ -2,8 +2,8 @@ const { DateTime } = require("luxon");
 
 const cardRepository = require("../../database/card-repository");
 
-const { getQuizzQueryParamsSchema } = require("./schema");
-const { getDayDelayByCategoryName, LAST_CATEGORY_NAME } = require("../Card/category")
+const { getQuizzQueryParamsSchema, answerQuestionBodySchema } = require("./schema");
+const { getDayDelayByCategoryName, retrieveUpperCategory, LAST_CATEGORY_NAME, getCategoryNameByIndex } = require("../Card/category")
 
 
 function formateDateStringToDateObject (stringDate) {
@@ -29,6 +29,20 @@ function selectCardsForQuizz (quizzDate, cards) {
   })
 }
 
+function updateCardInFunctionOftheAnswer (card, isValide) {
+  const newCategory = isValide ? retrieveUpperCategory(card.category) : getCategoryNameByIndex(0)
+
+  if (!newCategory) {
+    throw new Error("An error occurred while retrieving the top category")
+  }
+
+  cardRepository.updateCardById(card.id, {
+    ...card,
+    category: newCategory,
+    date: DateTime.now().toISO()
+  })
+}
+
 const QuizzController = {
   getQuizz: (request, response) => {
     const { value: validatedQueryParams, error } = getQuizzQueryParamsSchema.validate(request.query)
@@ -44,13 +58,34 @@ const QuizzController = {
     const selectedCardsForQuizz = selectCardsForQuizz(quizzDate, cards)
 
     return response.status(200).json(selectedCardsForQuizz)
-  }
+  },
+  answerQuestion: (request, response) => {
+    const { value: validatedBody, error } = answerQuestionBodySchema.validate(request.body)
 
+    if (error) {
+      return response.status(422).send(error.message)
+    }
+
+    const card = cardRepository.getCardById(request.params.cardId)
+
+    if (!card) {
+      return response.status(404).send("Card not found")
+    }
+
+    try {
+      updateCardInFunctionOftheAnswer(card, validatedBody.isValide)
+      return response.sendStatus(204)
+    } catch (error) {
+      return response.sendStatus(500)
+    }
+
+  }
 }
 
 const exportedForTesting = {
   computeDayDifferenceBetweenTwoDate,
-  selectCardsForQuizz
+  selectCardsForQuizz,
+  updateCardInFunctionOftheAnswer
 }
 
 module.exports = {

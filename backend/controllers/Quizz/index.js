@@ -29,8 +29,8 @@ function selectCardsForQuizz (quizzDate, cards) {
   })
 }
 
-function updateCardInFunctionOftheAnswer (card, isValide) {
-  const newCategory = isValide ? retrieveUpperCategory(card.category) : getCategoryNameByIndex(0)
+function updateCardInFunctionOftheAnswer (card, isValid) {
+  const newCategory = isValid ? retrieveUpperCategory(card.category) : getCategoryNameByIndex(0)
 
   if (!newCategory) {
     throw new Error("An error occurred while retrieving the top category")
@@ -73,7 +73,7 @@ const QuizzController = {
     }
 
     try {
-      updateCardInFunctionOftheAnswer(card, validatedBody.isValide)
+      updateCardInFunctionOftheAnswer(card, validatedBody.isValid)
       return response.sendStatus(204)
     } catch (error) {
       return response.sendStatus(500)

@@ -1,9 +1,9 @@
-import CardComponent from "@/components/card-component"
 import { useFetchCards } from "@/services/card.service"
 import { useState } from "react"
-import TagFilterInput from "./tag-filter/tag-filter-input"
-import TagFIlterList from "./tag-filter/tag-filter-list"
+import TagFilterInput from "./tag-filter-form/tag-filter-input"
+import TagFIlterList from "./tag-filter-form/tag-filter-list"
 import CreateCardForm from "./create-card-form"
+import CardComponentWithCardModal from "./card-with-modal"
 
 function ErrorComponent () {
   return <h2 className="mx-auto">An error has occurred while retrieving cards</h2>
@@ -16,23 +16,22 @@ function LoadingComponent () {
 function CardList () {
   const [tags, setTags] = useState<string[]>([])
 
-  const fetchCardsRequest = useFetchCards( { tags } )
-  
-  if (fetchCardsRequest.error) {
-    return <ErrorComponent />
-  }
-
-  if (fetchCardsRequest.status === "pending") {
-    return <LoadingComponent />
-  }
+  const {data: cards, status: fetchCardsRequestStatus} = useFetchCards( { tags } )
 
   function addTagToList (tagToAdd: string) {
     setTags([...tags, tagToAdd])
   }
 
   function removeTagFromList (tagToRemove: string) {
-
     setTags(tags.filter(tag => tag !== tagToRemove))
+  }
+  
+  if (fetchCardsRequestStatus === "error") {
+    return <ErrorComponent />
+  }
+
+  if (fetchCardsRequestStatus === "pending") {
+    return <LoadingComponent />
   }
 
   return (
@@ -45,7 +44,7 @@ function CardList () {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        { fetchCardsRequest.data.map(card => <CardComponent key={card.id} card={card}/>) }
+        { cards.map(card => <CardComponentWithCardModal key={card.id} card={card}/>) }
       </div>
     </div>
   )

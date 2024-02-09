@@ -5,7 +5,7 @@ const getQuizzQueryParamsSchema = Joi.object({
 })
 
 const answerQuestionBodySchema = Joi.object({
-  isValide: Joi.boolean().required()
+  isValid: Joi.boolean().required()
 })
 
 module.exports = {

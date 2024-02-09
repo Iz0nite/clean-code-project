@@ -12,6 +12,9 @@ const Header = () => {
         <Button asChild>
             <Link to="/cards">Card List</Link>
         </Button>
+        <Button asChild>
+            <Link to="/quizz">Quizz</Link>
+        </Button>
       </div>
     </header>
   )

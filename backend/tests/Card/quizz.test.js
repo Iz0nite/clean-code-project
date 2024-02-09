@@ -114,7 +114,7 @@ describe("Quizz creation", () => {
     it("Should return a list of cards for the quizz, and use the date in the queryParams. So it will return only the firstCard", () => {
       const request = httpMocks.createRequest({
         query: {
-          date: "2024-02-03"
+          date: "2024-02-04"
         }
       })
   
@@ -166,12 +166,12 @@ describe("Answer to a question", () => {
         "tag": "Teamwork"
       }
       
-      const isValide = true
+      const isValid = true
 
-      expect(() => updateCardInFunctionOftheAnswer(card, isValide)).toThrow()
+      expect(() => updateCardInFunctionOftheAnswer(card, isValid)).toThrow()
     })
 
-    it("Should call cardRepository.updateCardById with te FIRST category and the date of today, because isValide is equal to false", () => {
+    it("Should call cardRepository.updateCardById with te FIRST category and the date of today, because isValid is equal to false", () => {
       const card = {
         "id": "6c10ad48-2bb8-4e2e-900a-21d62c00c07b",
         "category": "THIRD",
@@ -181,9 +181,9 @@ describe("Answer to a question", () => {
         "tag": "Teamwork"
       }
       
-      const isValide = false
+      const isValid = false
 
-      updateCardInFunctionOftheAnswer(card, isValide)
+      updateCardInFunctionOftheAnswer(card, isValid)
 
       expect(cardRepository.updateCardById).toHaveBeenCalledTimes(1)
       expect(cardRepository.updateCardById).toHaveBeenCalledWith(card.id, {
@@ -193,7 +193,7 @@ describe("Answer to a question", () => {
       })
     })
 
-    it("Should call cardRepository.updateCardById with te FOURTH category and the date of today, because isValide is equal to true", () => {
+    it("Should call cardRepository.updateCardById with te FOURTH category and the date of today, because isValid is equal to true", () => {
       const card = {
         "id": "6c10ad48-2bb8-4e2e-900a-21d62c00c07b",
         "category": "THIRD",
@@ -203,9 +203,9 @@ describe("Answer to a question", () => {
         "tag": "Teamwork"
       }
       
-      const isValide = true
+      const isValid = true
 
-      updateCardInFunctionOftheAnswer(card, isValide)
+      updateCardInFunctionOftheAnswer(card, isValid)
 
       expect(cardRepository.updateCardById).toHaveBeenCalledTimes(1)
       expect(cardRepository.updateCardById).toHaveBeenCalledWith(card.id, {
@@ -234,7 +234,7 @@ describe("Answer to a question", () => {
     it("Should return an error (404) because the card in request has not been found", () => {
       const request = httpMocks.createRequest({
         body: {
-          isValide: true,
+          isValid: true,
         }
       })
   
@@ -251,7 +251,7 @@ describe("Answer to a question", () => {
     it("Should return an error (500) because the card used has a wrong category name", () => {
       const request = httpMocks.createRequest({
         body: {
-          isValide: true,
+          isValid: true,
         }
       })
   
@@ -275,7 +275,7 @@ describe("Answer to a question", () => {
     it("Should return a 204 status because all informations are good", () => {
       const request = httpMocks.createRequest({
         body: {
-          isValide: true,
+          isValid: true,
         }
       })
   

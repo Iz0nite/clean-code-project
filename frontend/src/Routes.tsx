@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import DefaultLayout from "./layouts/default-layout"
 import MainPage from "./pages/MainPage"
 import CardList from "./pages/CardList/card-list"
+import Quizz from "./pages/Quizz/quizz"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const Routes = () => {
         {
           path: "cards",
           element: <CardList />,
+        },
+        {
+          path: "quizz",
+          element: <Quizz />,
         }
       ]
     },

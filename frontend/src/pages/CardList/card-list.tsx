@@ -3,6 +3,7 @@ import { useFetchCards } from "@/services/card.service"
 import { useState } from "react"
 import TagFilterInput from "./tag-filter/tag-filter-input"
 import TagFIlterList from "./tag-filter/tag-filter-list"
+import CreateCardForm from "./create-card-form"
 
 function ErrorComponent () {
   return <h2 className="mx-auto">An error has occurred while retrieving cards</h2>
@@ -37,14 +38,14 @@ function CardList () {
   return (
     <div className="h-screen flex flex-col gap-6 px-6">
       <div className="w-full flex justify-between items-center">
-        <p>Future input</p>
+        <CreateCardForm />
         <div className="flex flex-col">
           <TagFIlterList tags={tags} removeTagFromList={removeTagFromList}/>
           <TagFilterInput addTagToList={addTagToList} />
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        { fetchCardsRequest.data.map(card => <CardComponent card={card}/>) }
+        { fetchCardsRequest.data.map(card => <CardComponent key={card.id} card={card}/>) }
       </div>
     </div>
   )

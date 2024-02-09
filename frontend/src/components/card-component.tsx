@@ -2,7 +2,6 @@ import { Card } from "@/utils/types"
 import { ShadcnCard, ShadcnCardContent, ShadcnCardDescription, ShadcnCardHeader } from "./ui/card"
 import { Separator } from "./ui/separator"
 import { useState } from "react"
-import { Button } from "./ui/button"
 import CardModal from "./card-modal"
 
 type CardComponentProps = {

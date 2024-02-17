@@ -43,7 +43,7 @@ function CardList () {
           <TagFilterInput addTagToList={addTagToList} />
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div data-testid="card-list" className="grid grid-cols-4 gap-4">
         { cards.map(card => <CardComponentWithCardModal key={card.id} card={card}/>) }
       </div>
     </div>

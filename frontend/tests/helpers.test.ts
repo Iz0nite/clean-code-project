@@ -13,7 +13,6 @@ describe("Helpers functions", () => {
     test("Should return 'Invalid date'", () => {
       const formatedDateToLocalString = formatDateToLocalString("I'm not a date :(")
 
-      console.log(formatedDateToLocalString);
       expect(formatedDateToLocalString).toEqual("Invalid Date")
     })
   })

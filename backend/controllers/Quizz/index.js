@@ -3,7 +3,7 @@ const { DateTime } = require("luxon");
 const cardRepository = require("../../database/card-repository");
 
 const { getQuizzQueryParamsSchema, answerQuestionBodySchema } = require("./schema");
-const { getDayDelayByCategoryName, retrieveUpperCategory, LAST_CATEGORY_NAME, getCategoryNameByIndex } = require("../Card/category")
+const { getDayDelayByCategoryName, retrieveUpperCategoryName, LAST_CATEGORY_NAME, getCategoryNameByIndex } = require("../Card/category")
 
 
 function formateDateStringToDateObject (stringDate) {
@@ -21,6 +21,11 @@ function selectCardsForQuizz (quizzDate, cards) {
     if (card.category === LAST_CATEGORY_NAME) return false
 
     const dayDelay = getDayDelayByCategoryName(card.category)
+
+    if (!dayDelay) {
+      return false
+    }
+
     const dateOfLastAnswer = formateDateStringToDateObject(card.date)
 
     const dayDifference = computeDayDifferenceBetweenTwoDate(quizzDate, dateOfLastAnswer)
@@ -30,15 +35,15 @@ function selectCardsForQuizz (quizzDate, cards) {
 }
 
 function updateCardInFunctionOftheAnswer (card, isValid) {
-  const newCategory = isValid ? retrieveUpperCategory(card.category) : getCategoryNameByIndex(0)
+  const nextCategory = isValid ? retrieveUpperCategoryName(card.category) : getCategoryNameByIndex(0)
 
-  if (!newCategory) {
+  if (!nextCategory) {
     throw new Error("An error occurred while retrieving the top category")
   }
 
   cardRepository.updateCardById(card.id, {
     ...card,
-    category: newCategory,
+    category: nextCategory,
     date: DateTime.now().toISO()
   })
 }

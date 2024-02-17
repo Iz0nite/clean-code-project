@@ -4,8 +4,6 @@ const { DateTime, Settings } = require('luxon')
 const cardRepository = require("../../database/card-repository")
 const { CardController } = require('../../controllers/Card')
 
-const isoPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
-
 const expectedNow = DateTime.local(2024, 2, 7, 23, 0, 0);
 Settings.now = () => expectedNow.toMillis();
 

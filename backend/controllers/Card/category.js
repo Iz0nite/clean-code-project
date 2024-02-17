@@ -11,14 +11,20 @@ const CATEGORIES_BY_NAME_AND_DAY_DELAY = [
 const LAST_CATEGORY_NAME = "DONE"
 
 function getCategoryNameByIndex (index) {
-  return CATEGORIES_BY_NAME_AND_DAY_DELAY[index].categoryName
+  if (CATEGORIES_BY_NAME_AND_DAY_DELAY[index]) {
+    return CATEGORIES_BY_NAME_AND_DAY_DELAY[index].categoryName
+  }
 }
 
 function getDayDelayByCategoryName (categoryName) {
-  return CATEGORIES_BY_NAME_AND_DAY_DELAY.find(category => category.categoryName === categoryName).dayDelay
+  const category = CATEGORIES_BY_NAME_AND_DAY_DELAY.find(category => category.categoryName === categoryName)
+
+  if (category) {
+    return category.dayDelay
+  }
 }
 
-function retrieveUpperCategory (categoryName) {
+function retrieveUpperCategoryName (categoryName) {
   const categoryIndex = CATEGORIES_BY_NAME_AND_DAY_DELAY.findIndex(categories => categories.categoryName === categoryName)
 
   if (categoryIndex !== -1 && categoryIndex !== CATEGORIES_BY_NAME_AND_DAY_DELAY.length - 1) {
@@ -29,6 +35,6 @@ function retrieveUpperCategory (categoryName) {
 module.exports = {
   getCategoryNameByIndex,
   getDayDelayByCategoryName,
-  retrieveUpperCategory,
+  retrieveUpperCategoryName,
   LAST_CATEGORY_NAME
 }

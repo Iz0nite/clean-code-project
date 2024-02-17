@@ -1,4 +1,4 @@
-export function formatDate (stringDate: string) {
+export function formatDateToLocalString (stringDate: string) {
   return new Date(stringDate).toLocaleString()
 }
 

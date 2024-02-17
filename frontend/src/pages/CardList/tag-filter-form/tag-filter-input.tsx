@@ -43,7 +43,7 @@ function TagFilterInput ({ addTagToList }: TagFilterInputProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Search</Button>
       </form>
     </Form>
   )

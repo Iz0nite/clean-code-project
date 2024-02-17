@@ -1,5 +1,5 @@
 const CATEGORIES_BY_NAME_AND_DAY_DELAY = [ 
-  {categoryName: "FIRST", dayDelay: 0},
+  {categoryName: "FIRST", dayDelay: 1},
   {categoryName: "SECOND", dayDelay: 2},
   {categoryName: "THIRD", dayDelay: 4},
   {categoryName: "FOURTH", dayDelay: 8},

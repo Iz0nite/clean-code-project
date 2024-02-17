@@ -22,3 +22,7 @@ export function formatQueryParams(queryParams?: Record<string, string | string[]
     return `?${formatedQueryParams}`
   }
 }
+
+export function sanitizeBody (body: Record<string, string | undefined>) {
+  return Object.fromEntries(Object.entries(body).filter(([_key, value]) => !!value))
+}

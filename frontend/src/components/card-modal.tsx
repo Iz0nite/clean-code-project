@@ -1,7 +1,7 @@
 import { Card } from "@/utils/types"
 import { Separator } from "./ui/separator"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog"
-import { formatDate } from "@/utils/helpers"
+import { formatDateToLocalString } from "@/utils/helpers"
 
 type CardModalProps = {
   card: Card
@@ -19,7 +19,7 @@ function CardModal ({ card, isCardModalOpen, onCardModalOpenChange }: CardModalP
             <p>Category: {card.category}</p>
             <div>
               <DialogDescription>Tag: {card.tag}</DialogDescription>
-              <DialogDescription>Last Answer: {formatDate(card.date)}</DialogDescription>
+              <DialogDescription>Last Answer: {formatDateToLocalString(card.date)}</DialogDescription>
             </div>
           </div>
         </DialogHeader>

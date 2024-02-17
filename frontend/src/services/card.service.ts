@@ -1,16 +1,19 @@
 import { formatQueryParams, sanitizeBody } from "@/utils/helpers"
 import { Card } from "@/utils/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { QUERY_FUNCTION_ERRORS } from "./utils/query-function-errors"
 
 type useFetchCardsQueryParams = {
   tags: string[]
 }
 
-async function fetchCardsQueryFunction (url: string) {
+async function fetchCardsQueryFunction (formatedQueryParams?: string) {
+  const url = formatedQueryParams ? `${import.meta.env.VITE_API_URL}/cards${formatedQueryParams}` : `${import.meta.env.VITE_API_URL}/cards`
+
   const response = await fetch(url)
 
   if (!response.ok) {
-    throw new Error("Something went wrong with the request (getCards)")
+    throw new Error(QUERY_FUNCTION_ERRORS.fetchCardsQueryFunction)
   }
 
   return await response.json()
@@ -18,12 +21,11 @@ async function fetchCardsQueryFunction (url: string) {
 
 export function useFetchCards (queryParams?: useFetchCardsQueryParams) {
   const formatedQueryParams = formatQueryParams(queryParams)
-  const url = formatedQueryParams ? `${import.meta.env.VITE_API_URL}/cards${formatedQueryParams}` : `${import.meta.env.VITE_API_URL}/cards`
 
   return useQuery<Card[]>(
     {
-      queryKey: ["getCards", url],
-      queryFn: async () => fetchCardsQueryFunction(url),
+      queryKey: ["getCards", formatedQueryParams],
+      queryFn: async () => fetchCardsQueryFunction(formatedQueryParams),
       retry: false
     }
   )
@@ -47,7 +49,7 @@ async function addCardQueryFunction (body: AddCardBodySchema) {
   })
 
   if (!response.ok) {
-    throw new Error("Something went wrong with the request (addCard)")
+    throw new Error(QUERY_FUNCTION_ERRORS.addCardQueryFunction)
   }
 
   return await response.json()
@@ -60,4 +62,9 @@ export function useAddCard ({ onSuccess, onError }: { onSuccess: () => void; onE
     onError,
     retry: false,
   })
+}
+
+export const exportedForTesting = {
+  fetchCardsQueryFunction,
+  addCardQueryFunction
 }

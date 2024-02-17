@@ -1,16 +1,19 @@
 import { formatQueryParams } from "@/utils/helpers"
 import { Card } from "@/utils/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { QUERY_FUNCTION_ERRORS } from "./utils/query-function-errors"
 
 type useFetchQuizzQueryParams = {
   date?: string
 }
 
-async function fetchQuizzQueryFunction (url: string) {
+async function fetchQuizzQueryFunction (formatedQueryParams?: string) {
+  const url = formatedQueryParams ? `${import.meta.env.VITE_API_URL}/cards/quizz${formatedQueryParams}` : `${import.meta.env.VITE_API_URL}/cards/quizz`  
+
   const response = await fetch(url)
 
   if (!response.ok) {
-    throw new Error("Something went wrong with the request (getQuizz)")
+    throw new Error(QUERY_FUNCTION_ERRORS.fetchQuizzQueryFunction)
   }
 
   return await response.json()
@@ -18,12 +21,11 @@ async function fetchQuizzQueryFunction (url: string) {
 
 export function useFetchQuizz (queryParams?: useFetchQuizzQueryParams) {
   const formatedQueryParams = formatQueryParams(queryParams)
-  const url = formatedQueryParams ? `${import.meta.env.VITE_API_URL}/cards/quizz${formatedQueryParams}` : `${import.meta.env.VITE_API_URL}/cards/quizz`  
 
   return useQuery<Card[]>(
     {
-      queryKey: ["getQuizz", url],
-      queryFn: async () => fetchQuizzQueryFunction(url),
+      queryKey: ["getQuizz", formatedQueryParams],
+      queryFn: async () => fetchQuizzQueryFunction(formatedQueryParams),
       retry: false,
       enabled: !!formatedQueryParams
     }
@@ -44,7 +46,7 @@ async function answerQuestionQueryFunction (cardId: string, body: AnswerQuestion
   })
 
   if (!response.ok) {
-    throw new Error("Something went wrong with the request (answerQuestion)")
+    throw new Error(QUERY_FUNCTION_ERRORS.answerQuestionQueryFunction)
   }
 }
 
@@ -55,4 +57,9 @@ export function useAnswerQuestion ({ onSuccess, onError }: { onSuccess: () => vo
     onError,
     retry: false,
   })
+}
+
+export const exportedForTesting = {
+  fetchQuizzQueryFunction,
+  answerQuestionQueryFunction
 }
